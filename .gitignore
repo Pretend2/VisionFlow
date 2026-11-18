@@ -12,7 +12,10 @@ __pycache__/
 
 # Packaging and build outputs
 build/
+build-*/
 dist/
+dist-*/
+release/
 *.egg-info/
 *.manifest
 *.spec.bak

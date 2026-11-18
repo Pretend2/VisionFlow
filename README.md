@@ -16,6 +16,10 @@ Powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework)
   <img alt="python" src="https://img.shields.io/badge/Python-3.12-3776AB.svg">
 </p>
 
+<p align="center">
+  中文 · <a href="README_EN.md">English</a>
+</p>
+
 ## 使用须知
 
 项目处于持续迭代阶段，当前已在 Windows + MuMu 模拟器环境中完成验证。
@@ -86,6 +90,8 @@ maa-assets/
 ```text
 *.vision.json
 ```
+
+本地设备配置请参考 `environment.example.json`，创建未提交的 `environment.local.json`。
 
 ## 开发相关
 

@@ -1,0 +1,8 @@
+{
+  "adb_executable": "",
+  "adb_serial": "127.0.0.1:5555",
+  "adb_display_id": "",
+  "mumu_manager_executable": "",
+  "capture_mode": "auto",
+  "capture_backend": "stream"
+}
