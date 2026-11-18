@@ -1,0 +1,67 @@
+# Python virtual environments and caches
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyd
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.pyre/
+
+# Packaging and build outputs
+build/
+dist/
+*.egg-info/
+*.manifest
+*.spec.bak
+
+# Local configuration and secrets
+environment.local.json
+environment-check.local.json
+.env
+.env.*
+!.env.example
+
+# Runtime logs and temporary files
+*.log
+*.tmp
+*.temp
+*.bak
+*.swp
+*.swo
+
+# Local VisionFlow project files and captured images
+images/
+*.mumu.json
+*.vision.json
+*.png
+*.jpg
+*.jpeg
+*.bmp
+*.webp
+
+# MaaFramework runtime assets are part of the distributable source tree
+!maa-assets/
+!maa-assets/**/*.png
+!maa-assets/**/*.jpg
+!maa-assets/**/*.jpeg
+!maa-assets/**/*.bmp
+!maa-assets/**/*.webp
+
+# Generated verification, probe, and screenshot artifacts
+artifacts/
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.code-workspace
+
+# Windows and OS metadata
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Keep the build definition in the repository
+!VisionFlow.spec
