@@ -2,6 +2,7 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 import numpy as np
 from studio.device import DeviceConfig, parse_display_state, select_display
 from studio.flow import advance, describe_rule, execute, rule_clicks, walk
@@ -9,6 +10,27 @@ from studio.models import (MODES, Project, Rule, TreeNode, TEXT_MATCHES, collect
                            prune_tree, unique_names)
 from studio.ocr import OCRText, text_match
 from studio.vision import Match, TriggerGate, choose_rule, gate_reason, match_rule, match_rules
+from studio.stream import AdbScreenStream
+
+
+class StreamTests(unittest.TestCase):
+    def test_screenrecord_hides_windows_console(self):
+        class FakeProcess:
+            stdout = object()
+            def poll(self):
+                return None
+
+        class FakeThread:
+            def __init__(self, **kwargs):
+                self.kwargs = kwargs
+            def start(self):
+                pass
+
+        with patch('studio.stream.subprocess.Popen', return_value=FakeProcess()) as popen, \
+             patch('studio.stream.threading.Thread', side_effect=lambda **kwargs: FakeThread(**kwargs)):
+            AdbScreenStream('adb.exe', '127.0.0.1:5555', '0').start()
+        self.assertEqual(popen.call_args.kwargs['creationflags'], getattr(__import__('subprocess'), 'CREATE_NO_WINDOW', 0))
+
 
 class VisionTests(unittest.TestCase):
     def setUp(self):

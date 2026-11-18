@@ -42,7 +42,8 @@ class AdbScreenStream:
         self.finished = False
         self._next_convert = 0.0
         self.process = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
-                                         bufsize=0)
+                                         bufsize=0,
+                                         creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
         self.thread = threading.Thread(target=self._decode, name='visionflow-screen-stream', daemon=True)
         self.thread.start()
 
