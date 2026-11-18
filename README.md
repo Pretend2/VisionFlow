@@ -24,7 +24,7 @@ Powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework)
 
 项目处于持续迭代阶段，当前已在 Windows + MuMu 模拟器环境中完成验证。
 
-- 其他 Android 模拟器和真实 Android 设备：理论上支持标准 ADB 接口，尚未逐一实机验证。
+- 其他 Android 模拟器遵循标准 ADB 接口。
 - 开启 [自动执行] 才会向设备发送真实点击或输入。
 - 请固定设备分辨率和方向，避免识别区域与点击坐标失效。
 
@@ -74,7 +74,7 @@ maa-assets/
 
 ### 连接设备
 
-1. 启动 Android 模拟器，或通过 USB / 网络连接 Android 设备。
+1. 启动 Android 模拟器。
 2. 在「设备设置」中选择对应的 `adb.exe`。
 3. 填写设备地址，例如 `127.0.0.1:5555`。
 4. 点击「连接设备」。
@@ -119,7 +119,7 @@ maa-assets/
 dist/VisionFlow/
 ```
 
-自检不会向真实设备发送点击。
+自检不会发送点击。
 
 ## 目录说明
 

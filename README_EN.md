@@ -20,7 +20,7 @@ Powered by [MaaFramework](https://github.com/MaaXYZ/MaaFramework)
 
 The project is under active development and has currently been verified on Windows with the MuMu Android emulator.
 
-- Other Android emulators and physical Android devices should work through standard ADB interfaces, but have not been individually tested.
+- Other Android emulators should work through standard ADB interfaces.
 - Automatic execution sends real taps or input events to the connected device. Keep automatic execution disabled until recognition results have been verified.
 - Keep the device resolution and orientation fixed while a workflow is running.
 - VisionFlow is an independent third-party project and is not affiliated with, authorized by, or commercially associated with any emulator vendor, game publisher, or the MaaFramework team.
@@ -93,7 +93,7 @@ The virtual environment does not need to be activated.
 
 ### Connect a device
 
-1. Start an Android emulator, or connect an Android device through USB or the network.
+1. Start an Android emulator.
 2. Select the device's `adb.exe` under **Device Settings**.
 3. Enter the device address, for example `127.0.0.1:5555`.
 4. Click **Connect Device**.
@@ -173,7 +173,7 @@ Build output:
 dist/VisionFlow/
 ```
 
-The smoke test covers recognition, condition branches, save/load round trips, single-step execution, monitoring cycles, GUI layout, and read-only device capture. It does not send clicks to a real device.
+The smoke test covers recognition, condition branches, save/load round trips, single-step execution, monitoring cycles, GUI layout, and read-only capture. It does not send clicks.
 
 ## Repository layout
 
