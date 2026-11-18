@@ -4,6 +4,7 @@ import json
 import re
 import subprocess
 import sys
+import time
 from dataclasses import dataclass, fields
 from pathlib import Path
 import cv2
@@ -146,6 +147,8 @@ class Device:
         self.config = config
         self.last_display: Display | None = None
         self.stream: AdbScreenStream | None = None
+        self._stream_display_id: str | None = None
+        self._last_stream_attempt = 0.0
 
     @property
     def source_description(self) -> str:
@@ -177,6 +180,27 @@ class Device:
             return self.command('shell', 'dumpsys', *args).decode('utf-8', errors='replace')
         return parse_display_state(query('SurfaceFlinger', '--display-id'), query('display'), query('window'))
 
+    def _start_stream(self, selected: Display, validate: bool = True) -> bool:
+        """Start screenrecord, retrying without display-id for standard Android devices."""
+        candidates = []
+        if self._stream_display_id is not None:
+            candidates.append(self._stream_display_id)
+        else:
+            candidates.append(selected.physical_id)
+            if selected.physical_id:
+                candidates.append('')
+        for display_id in dict.fromkeys(candidates):
+            stream = AdbScreenStream(self.config.adb_executable, self.config.adb_serial, display_id)
+            stream.start()
+            if not validate or stream.wait_for_frame():
+                self.stream = stream
+                self._stream_display_id = display_id
+                return True
+            stream.stop()
+        self.stream = None
+        self._last_stream_attempt = time.monotonic()
+        return False
+
     def connect(self) -> str:
         serial = self.config.adb_serial.strip()
         if not serial:
@@ -187,9 +211,7 @@ class Device:
             raise RuntimeError('设备尚未就绪')
         self.last_display = select_display(self.config, self.display_state())
         if self.config.capture_backend == 'stream':
-            self.stream = AdbScreenStream(self.config.adb_executable, self.config.adb_serial,
-                                          self.last_display.physical_id)
-            self.stream.start()
+            self._start_stream(self.last_display, validate=True)
         return f'已连接 {serial}；{self.source_description}'
 
     def ensure_stream(self) -> bool:
@@ -201,15 +223,16 @@ class Device:
             self.stream = None
         if self.stream:
             return True
+        # 避免不兼容的设备每个预览 tick 都重新启动 screenrecord。
+        if time.monotonic() - self._last_stream_attempt < 2.0:
+            return False
         try:
             selected = select_display(self.config, self.display_state())
             self.last_display = selected
-            self.stream = AdbScreenStream(self.config.adb_executable, self.config.adb_serial,
-                                          selected.physical_id)
-            self.stream.start()
-            return True
+            return self._start_stream(selected, validate=self._stream_display_id is None)
         except Exception:
             self.stream = None
+            self._last_stream_attempt = time.monotonic()
             return False
 
     def screenshot(self) -> np.ndarray:

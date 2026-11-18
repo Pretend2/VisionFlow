@@ -92,6 +92,16 @@ class AdbScreenStream:
                 self.condition.wait(remaining)
             return self.latest
 
+    def wait_for_frame(self, timeout: float = 1.5) -> bool:
+        deadline = time.monotonic() + timeout
+        with self.condition:
+            while self.latest is None and not self.finished:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    break
+                self.condition.wait(remaining)
+            return self.latest is not None
+
     def snapshot(self) -> tuple[np.ndarray | None, int]:
         with self.condition:
             return self.latest, self.sequence

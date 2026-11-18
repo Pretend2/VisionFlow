@@ -1572,6 +1572,10 @@ class MainWindow(QMainWindow):
         def done(message):
             self.config = device.config
             self.device = device
+            try:
+                (app_directory() / 'environment.local.json').write_text(json.dumps(asdict(self.config), ensure_ascii=False, indent=2), encoding='utf-8')
+            except OSError as exc:
+                self.log(f'设备已连接，但无法保存连接配置：{exc}')
             status = f'● 已连接 · {device.last_display.title}' if device.last_display else '● 已连接'
             self.device_status.setText(status)
             self.device_status.setStyleSheet('color: #54d6b3')
